@@ -59,6 +59,7 @@ export default {
       authStore: useAuthStore(),
       items: [
         { label: 'Главная', icon: 'pi pi-home', route: '/' },
+        { label: 'Публикации', icon: 'pi pi-file', route: '/publications' },
         { label: 'Журналы', icon: 'pi pi-book', route: '/journals' },
         { label: 'Персоны', icon: 'pi pi-users', route: '/persons' }
       ]
@@ -72,6 +73,7 @@ export default {
   methods: {
     logout() { 
       this.authStore.logout()
+      this.$router.push('/');
       this.email = ''
       this.password = ''
     },
