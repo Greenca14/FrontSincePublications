@@ -17,7 +17,7 @@
       <Column field="title" header="Название" />
       <Column header="Год">
         <template #body="slotProps">
-          {{ getYearFromDate(slotProps.data.publication_date) }}
+          {{ getYear(slotProps.data) }}
         </template>
       </Column>
       <Column header="Журнал">
@@ -27,7 +27,7 @@
       </Column>
       <Column header="Авторы">
         <template #body="slotProps">
-          {{ getAuthorsNames(slotProps.data.authors) }}
+          {{ getpersons(slotProps.data.persons) }}
         </template>
       </Column>
     </DataTable>
@@ -47,50 +47,28 @@ export default {
     return {
       dataStore: useDataStore(),
       perpage: 5,
-      offset: 0,
-      personsMap: {} // Кэш для персон: person_id -> full_name
+      offset: 0
     }
   },
   
   computed: {
     publications() {
-      return this.dataStore.publications || []
+      const pubs = this.dataStore.publications || []
+      return pubs
     },
     publications_total() {
       return this.dataStore.publications_total || 0
-    },
-    persons() {
-      return this.dataStore.persons || []
     }
   },
   
   mounted() {
-    this.loadPersons().then(() => {
-      this.loadData()
-    })
+    this.loadData()
   },
   
   methods: {
-    async loadPersons() {
-      try {
-        await this.dataStore.get_persons(0, 100)
-        
-        this.personsMap = {}
-        this.persons.forEach(person => {
-          this.personsMap[person.id] = person.full_name
-        })
-        
-        console.log('Карта персон создана. Записей:', Object.keys(this.personsMap).length)
-        console.log('Пример:', this.personsMap[1])
-      } catch (error) {
-        console.error('Ошибка загрузки персон:', error)
-      }
-    },
-    
     async loadData() {
       await this.dataStore.get_publications()
       await this.dataStore.get_publications_total()
-    
     },
     
     onPageChange(event) {
@@ -100,46 +78,28 @@ export default {
       this.dataStore.get_publications(page, this.perpage)
     },
     
-    getYearFromDate(dateString) {
-      if (!dateString) {
-        return this.publications.find(p => p.id === this.publications[0]?.id)?.year || '-'
+    getYear(pub) {
+      if (pub.publication_date) {
+        const year = new Date(pub.publication_date).getFullYear()
+        return isNaN(year) ? '-' : year
       }
-      
-      try {
-        const date = new Date(dateString)
-        if (isNaN(date.getTime())) {
-          if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
-            return dateString.split('-')[0] // Берем год
-          }
-          return '-'
-        }
-        return date.getFullYear()
-      } catch (error) {
-        console.error('Ошибка парсинга даты:', error)
-        return '-'
-      }
+      return '-'
     },
     
-    getAuthorsNames(authors) {
-      if (!authors || !Array.isArray(authors) || authors.length === 0) {
+    getpersons(persons) {
+      if (!persons || !Array.isArray(persons)) {
         return '-'
       }
       
-      console.log('Обрабатываю авторов:', authors)
-      console.log('Карта персон:', this.personsMap)
+      if (persons[0] && persons[0].full_name) {
+        return persons.map(a => a.full_name).join(', ')
+      }
       
-      const authorNames = authors
-        .map(author => {
-          const personId = author.person_id
-          const personName = this.personsMap[personId]
-          
-          return personName || `Автор #${personId}`
-        })
-        .filter(name => name) // Убираем пустые
-        .join(', ')
+      if (persons[0] && persons[0].person_id) {
+        return persons.map(a => `Автор #${a.person_id}`).join(', ')
+      }
       
-      console.log('Результат:', authorNames)
-      return authorNames || '-'
+      return 'Авторы не указаны'
     }
   }
 }

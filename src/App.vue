@@ -61,7 +61,8 @@ export default {
         { label: 'Главная', icon: 'pi pi-home', route: '/' },
         { label: 'Публикации', icon: 'pi pi-file', route: '/publications' },
         { label: 'Журналы', icon: 'pi pi-book', route: '/journals' },
-        { label: 'Персоны', icon: 'pi pi-users', route: '/persons' }
+        { label: 'Персоны', icon: 'pi pi-users', route: '/persons' },
+        { label: 'Создать персону', icon: 'pi pi-users', route: '/createPerson'}
       ]
     }
   },
@@ -90,28 +91,3 @@ export default {
   }
 }
 </script>
-
-<style>
-body {
-  background-color: #1a1a1a;
-  color: white;
-  margin: 0;
-  padding: 0;
-}
-
-/* Убираем подчеркивание и синий цвет у ссылок меню */
-.p-menubar .p-menuitem-link {
-  text-decoration: none !important;
-  color: #cbd5e0 !important;
-}
-
-.p-menubar .p-menuitem-link:hover {
-  text-decoration: none !important;
-  color: #ffffff !important;
-}
-
-/* Активная ссылка */
-.p-menubar .p-menuitem-link.router-link-active {
-  color: #63b3ed !important;
-}
-</style>

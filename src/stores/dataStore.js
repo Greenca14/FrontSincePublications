@@ -17,12 +17,65 @@ export const useDataStore = defineStore('data', {
         categories: [],
         categories_total: null,
         items: [],
-        
+        errorCode: "",
+        errorMessage: "",
+
         loading: false,
         errorMessage: ""
     }),
     
     actions: {
+        async create_person(formData) {
+            this.errorMessage = ""
+            this.errorCode = ""
+            try {
+                const response = await axios.post(
+                    backendUrl + '/persons',
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization: 'Bearer ' + localStorage.getItem('token')
+                        }
+                    }
+                )
+                this.errorCode = response.data.code
+                this.errorMessage = response.data.message
+            } catch (error) {
+                if (error.response) {
+                    this.errorCode = "11"
+                    this.errorMessage = error.response.data.message
+                    console.log(error)
+                } else if (error.request) {
+                    this.errorCode = "12"
+                    this.errorMessage = error.message
+                    console.log(error)
+                } else {
+                    this.errorCode = "13"
+                    console.log(error)
+                }
+            }
+        },
+
+        async get_persons(page = 1, limit = 10){
+            try {
+                const response = await axios.get(
+                    backendUrl + '/persons',
+                    {
+                        params: { page, limit },
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('token')
+                        }
+                    }
+                );
+                this.persons = response.data.data;
+                this.persons_total = response.data.total;
+            } catch (error) {
+                console.error('Error fetching persons:', error);
+            }
+        },
+    
+
         async get_journals(page = 0, perpage = 5) {
             this.loading = true
             this.errorMessage = ""
@@ -122,6 +175,7 @@ export const useDataStore = defineStore('data', {
                     }
                 })
                 this.persons = response.data
+                
             } catch (error) {
                 if (error.response) {
                     this.errorMessage = error.response.data.message
@@ -134,6 +188,7 @@ export const useDataStore = defineStore('data', {
                 }
             } finally {
                 this.loading = false
+                
             }
         },
 
