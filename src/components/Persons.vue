@@ -1,6 +1,5 @@
 <template>
   <div>
-  
     <h1>Персоны</h1>
     
     <DataTable
@@ -14,6 +13,25 @@
       @page="onPageChange"
       :first="offset"
     >
+      <Column header="Аватар" style="width: 80px">
+        <template #body="slotProps">
+          <div class="flex justify-center">
+            <img 
+              v-if="slotProps.data.avatar" 
+              :src="slotProps.data.avatar" 
+              :alt="slotProps.data.full_name"
+              class="w-10 h-10 rounded-full object-cover border"
+            />
+            <div 
+              v-else
+              class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500"
+            >
+              <i class="pi pi-user" style="font-size: 1rem"></i>
+            </div>
+          </div>
+        </template>
+      </Column>
+      
       <Column field="id" header="ID" />
       <Column field="full_name" header="ФИО" />
       <Column field="birth_date" header="Дата рождения">
@@ -48,7 +66,7 @@ export default {
       console.log('Персоны из хранилища:', this.dataStore.persons)
       if (this.dataStore.persons && this.dataStore.persons.length > 0) {
         console.log('Первая персона:', this.dataStore.persons[0])
-        console.log('Поле full_name:', this.dataStore.persons[0]?.full_name)
+        console.log('Поле avatar:', this.dataStore.persons[0]?.avatar)
       }
       return this.dataStore.persons || []
     },
