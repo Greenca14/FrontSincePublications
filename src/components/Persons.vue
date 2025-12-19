@@ -71,13 +71,11 @@ export default {
   },
   
   mounted() {
-    console.log('Persons component mounted')
     this.loadData()
   },
   
   methods: {
     async loadData() {
-      console.log('Загрузка персон...')
       await this.dataStore.get_persons()
       await this.dataStore.get_persons_total()
     },

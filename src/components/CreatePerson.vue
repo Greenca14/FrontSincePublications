@@ -89,6 +89,14 @@ export default {
       const date = new Date(this.birthDate);
       return date.toISOString().split('T')[0];
     },
+    fullNamePreview() {
+      const parts = [];
+      if (this.lastName.trim()) parts.push(this.lastName.trim());
+      if (this.firstName.trim()) parts.push(this.firstName.trim());
+      if (this.middleName.trim()) parts.push(this.middleName.trim());
+      
+      return parts.length > 0 ? parts.join(' ') : null;
+    },
     fullNameForApi() {
       const parts = [];
       if (this.lastName.trim()) parts.push(this.lastName.trim());
@@ -152,7 +160,13 @@ export default {
       }
       
       const formData = new FormData();
-
+      
+      console.log('Отправляемые данные:');
+      console.log('full_name:', this.fullNameForApi);
+      console.log('birth_date:', this.formattedBirthDate);
+      console.log('avatar:', this.avatar ? this.avatar.name : 'нет');
+      console.log('Разбивка: Фамилия:', this.lastName, 'Имя:', this.firstName, 'Отчество:', this.middleName);
+      
       formData.append('full_name', this.fullNameForApi);
       
       if (this.formattedBirthDate) {
