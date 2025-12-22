@@ -81,6 +81,9 @@ export const useDataStore = defineStore('data', {
             this.errorMessage = ""
             try {
                 const response = await axios.get(backendUrl + '/journals', {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    },
                     params: {
                         page: page,
                         perpage: perpage
@@ -105,7 +108,11 @@ export const useDataStore = defineStore('data', {
         async get_journals_total() {
             this.errorMessage = ""
             try {
-                const response = await axios.get(backendUrl + '/journals_total')
+                const response = await axios.get(backendUrl + '/journals_total', {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    }
+                })
                 this.journals_total = response.data
             } catch (error) {
                 if (error.response) {
@@ -125,6 +132,9 @@ export const useDataStore = defineStore('data', {
             this.errorMessage = ""
             try {
                 const response = await axios.get(backendUrl + '/publications', {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    },
                     params: {
                         page: page,
                         perpage: perpage
@@ -149,7 +159,11 @@ export const useDataStore = defineStore('data', {
         async get_publications_total() {
             this.errorMessage = ""
             try {
-                const response = await axios.get(backendUrl + '/publications_total')
+                const response = await axios.get(backendUrl + '/publications_total',{
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    }
+                })
                 this.publications_total = response.data
             } catch (error) {
                 if (error.response) {
@@ -169,6 +183,9 @@ export const useDataStore = defineStore('data', {
             this.errorMessage = ""
             try {
                 const response = await axios.get(backendUrl + '/persons', {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    },
                     params: {
                         page: page,
                         perpage: perpage
@@ -195,7 +212,11 @@ export const useDataStore = defineStore('data', {
         async get_persons_total() {
             this.errorMessage = ""
             try {
-                const response = await axios.get(backendUrl + '/persons_total')
+                const response = await axios.get(backendUrl + '/persons_total',{
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    },
+                })
                 this.persons_total = response.data
             } catch (error) {
                 if (error.response) {
@@ -215,6 +236,9 @@ export const useDataStore = defineStore('data', {
             this.errorMessage = ""
             try {
                 const response = await axios.get(backendUrl + '/category', {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    },
                     params: {
                         page: page,
                         perpage: perpage
@@ -239,7 +263,11 @@ export const useDataStore = defineStore('data', {
         async get_categories_total() {
             this.errorMessage = ""
             try {
-                const response = await axios.get(backendUrl + '/categories_total')
+                const response = await axios.get(backendUrl + '/categories_total',{
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    }
+                })
                 this.categories_total = response.data
             } catch (error) {
                 if (error.response) {
